@@ -1,49 +1,58 @@
 import math
 
 class ChessPiece:
-    def __init__(self, colour, xpos, ypos):
+    def __init__(self, colour, ypos, xpos, has_moved=False):
         self.xpos = xpos
         self.ypos = ypos
         self.colour = colour
+        self.has_moved = has_moved
+        
+    def move_to(self, ypos, xpos):
+        self.xpos = xpos
+        self.ypos = ypos
+        self.has_moved = True
 
 class Pawn(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
-        self.has_moved = False  # Track if the pawn has moved
+    def __init__(self, colour, ypos, xpos, has_moved=False):
+        super().__init__(colour, ypos, xpos, has_moved)
+        
 
     def legalMove(self, movingxpos, movingypos, board):
         # Pawns can move forward one square, or two squares on their first move
         # Check if the destination square is within bounds
-        if movingxpos < 0 or movingxpos > 7 or movingypos < 0 or movingypos > 7:
-            print("out of bounds")
-            return False
+        print(f"to x:{movingxpos}")
+        print(f"to y:{movingypos}")
+        print(f"from x:{self.xpos}")
+        print(f"from y:{self.ypos}")
 
-        # Check if the destination square is occupied
-        if board[movingypos][movingxpos] is not None:
+        color_mult = -1 if self.colour == "black" else 1
+        print(f"color_mult: {color_mult}")
+        
+        if movingxpos == self.xpos and  board[movingypos][movingxpos] is None:
+            if movingypos == (self.ypos + color_mult):
+                print("moving one")
+                return True
+            elif not self.has_moved and movingypos == (self.ypos + color_mult * 2):
+                print("moving two (first move)")
+                return True
+                
+        # Check if we are moving by diagonal
+        if  (self.ypos + color_mult) == movingypos and abs(self.xpos - movingxpos) == 1:
             # If the destination square is occupied by an opponent's piece, allow capturing
-            if board[movingypos][movingxpos].colour != self.colour:
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
                 print("capturing")
                 return True
+            
             else:
                 print("ally")
                 return False
-
-        if movingxpos == self.xpos and movingypos == self.ypos:
-            print("cant stay")
-            return False
-        
-        if movingxpos == self.xpos and self.ypos + 1 == movingypos:
-            print("moving one")
-            return True
             
-        elif (self.has_moved != True and movingxpos == self.xpos and movingypos == self.ypos + 2 and board[self.xpos][self.ypos+2] is None):
-            print("jumping two")
-            return True
+        print("Meow")
         return False
 
 class Castle(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
+    def __init__(self, colour, ypos, xpos):
+        super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
         if (self.xpos == movingxpos or self.ypos == movingypos):
@@ -52,8 +61,8 @@ class Castle(ChessPiece):
 
 
 class Bishop(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
+    def __init__(self, colour, ypos, xpos):
+        super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
         if abs(movingxpos - self.xpos) == abs(movingypos - self.ypos):
@@ -62,8 +71,8 @@ class Bishop(ChessPiece):
 
 
 class King(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
+    def __init__(self, colour, ypos, xpos):
+        super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
         if abs(self.xpos - movingxpos) <= 1 and abs(self.ypos - movingypos) <= 1:
@@ -71,8 +80,8 @@ class King(ChessPiece):
         return False
 
 class Queen(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
+    def __init__(self, colour, ypos, xpos):
+        super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
         if abs(movingxpos - self.xpos) == abs(movingypos - self.ypos):
@@ -83,8 +92,8 @@ class Queen(ChessPiece):
 
 
 class Knight(ChessPiece):
-    def __init__(self, colour, xpos, ypos):
-        super().__init__(colour, xpos, ypos)
+    def __init__(self, colour, ypos, xpos):
+        super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
         if (self.xpos - movingxpos == 3 or movingxpos-self.xpos == 3) and (self.ypos - movingypos == 2 or movingypos-self.ypos == 2):
@@ -99,44 +108,46 @@ class ChessBoard:
         self.populate_board()
 
     def populate_board(self):
-        #white
+        #black
         #Rook
-        self.board[7][0] = Castle("white", 7, 0)
+        colour1 = "white"
+        colour2 = "black"
+        self.board[7][0] = Castle(colour2, 7, 0)
         #Bishop
-        self.board[4][2] = Bishop("white", 4, 2)
-        self.board[3][4] = Bishop("white", 3, 4)
+        self.board[4][2] = Bishop(colour2, 4, 2)
+        self.board[3][4] = Bishop(colour2, 3, 4)
         #Pawn
-        self.board[6][2] = Pawn("white", 6, 2)
-        self.board[6][0] = Pawn("white", 6, 0)
-        self.board[6][5] = Pawn("white", 6, 5)
-        self.board[6][7] = Pawn("white", 6, 7)
-        self.board[5][1] = Pawn("white", 5, 1)
-        self.board[5][4] = Pawn("white", 5, 4)
-        self.board[4][3] = Pawn("white", 4, 3)
+        self.board[6][2] = Pawn(colour2, 6, 2)
+        self.board[6][0] = Pawn(colour2, 6, 0, True)
+        self.board[6][5] = Pawn(colour2, 6, 5)
+        self.board[6][7] = Pawn(colour2, 6, 7, True)
+        self.board[5][1] = Pawn(colour2, 5, 1)
+        self.board[5][4] = Pawn(colour2, 5, 4)
+        self.board[4][3] = Pawn(colour2, 4, 3)
         #Horsy
-        self.board[7][1] = Knight("white", 7, 1)
-        self.board[4][7] = Knight("white", 4, 7)
+        self.board[7][1] = Knight(colour2, 7, 1)
+        self.board[4][7] = Knight(colour2, 4, 7)
         #Royal Pieces
-        self.board[7][3] = Queen("white", 7, 3)
-        self.board[7][4] = King("white", 7, 4)
+        self.board[7][3] = Queen(colour2, 7, 3)
+        self.board[7][4] = King(colour2, 7, 4)
 
-        #Black
+        #white
         #Horsy
-        self.board[4][4] = Knight("black", 4, 5)
-        self.board[2][2] = Knight("black", 2, 2)
+        self.board[4][4] = Knight(colour1, 4, 5)
+        self.board[2][2] = Knight(colour1, 2, 2)
         #Pawn
         for i in range(7):
-          self.board[1][i] = Pawn("black", 1, i)
+          self.board[1][i] = Pawn(colour1, 1, i)
 
         #Royal Pieces
-        self.board[7][7] = King("black", 7, 7)
-        self.board[3][6] = King("black", 3, 6)
+        self.board[7][7] = King(colour1, 7, 7)
+        self.board[3][6] = King(colour1, 3, 6)
         #Rook
-        self.board[0][0] = Castle("black", 0, 0)
-        self.board[0][7] = Castle("black", 0, 7)
+        self.board[0][0] = Castle(colour1, 0, 0)
+        self.board[0][7] = Castle(colour1, 0, 7)
         #Bishop
-        self.board[0][2] = Bishop("black", 0, 2)
-        self.board[0][5] = Bishop("black", 0, 5)
+        self.board[0][2] = Bishop(colour1, 0, 2)
+        self.board[0][5] = Bishop(colour1, 0, 5)
 
     def print_board(self):
         piece_emojis = {
@@ -166,7 +177,7 @@ class ChessBoard:
             print()
 
     def move_piece(self, startx, starty, endx, endy):
-        print("Moving piece from", startx, starty, "to", endx, endy)  # Debugging print
+        print("Moving piece from", starty, startx, "to", endy, endx)  # Debugging print
         piece = self.board[starty][startx]
         if not piece:
             print("No piece at the given position.")
@@ -175,9 +186,9 @@ class ChessBoard:
         if piece.legalMove(endx, endy, self.board):  # Passing the board instance
             self.board[endy][endx] = piece
             self.board[starty][startx] = None
-            piece.xpos = endx
-            piece.ypos = endy
-            print("Moved", piece.__class__.__name__, "to", endx, endy)  # Debugging print
+            piece.move_to(endy, endx)
+        
+            print("Moved", piece.__class__.__name__, "to", endy, endx)  # Debugging print
             return True
         else:
             print("Illegal move.")
@@ -261,8 +272,8 @@ def play_chess():
         board.print_board()
         start = input("Enter starting position (e.g., A2): ").upper()
         end = input("Enter ending position (e.g., A4): ").upper()
-        startx, starty = ord(start[0]) - ord('A'), int(start[1]) - 1
-        endx, endy = ord(end[0]) - ord('A'), int(end[1]) - 1
+        startx, starty = ord(start[0]) - ord('A'), int(start[1])-1
+        endx, endy = ord(end[0]) - ord('A'), int(end[1])-1
 
         if 0 <= startx <= 7 and 0 <= starty <= 7 and 0 <= endx <= 7 and 0 <= endy <= 7:
             if board.move_piece(startx, starty, endx, endy):
