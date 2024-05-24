@@ -28,7 +28,7 @@ class Pawn(ChessPiece):
         color_mult = -1 if self.colour == "black" else 1
         print(f"color_mult: {color_mult}")
         
-        if movingxpos == self.xpos and  board[movingypos][movingxpos] is None:
+        if movingxpos == self.xpos and board[movingypos][movingxpos] is None:
             if movingypos == (self.ypos + color_mult):
                 print("moving one")
                 return True
@@ -51,28 +51,29 @@ class Pawn(ChessPiece):
         return False
 
 class Castle(ChessPiece):
-    def __init__(self, colour, ypos, xpos):
-        super().__init__(colour, ypos, xpos)
+    def __init__(self, colour, ypos, xpos, has_moved=False):
+        super().__init__(colour, ypos, xpos, has_moved)
 
     def legalMove(self, movingxpos, movingypos, board):
-        if (self.xpos == movingxpos or self.ypos == movingypos):
-            return True
+        if movingxpos == self.xpos or movingypos == self.ypos:
+            if 0 <= movingypos <= 7 or 0 <= movingxpos <= 7:
+                if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
+                    print("capturing")
+                    return True
+            
+                elif board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
+                    print("ally")
+                    return False
+                else:
+                    print("Moving")
+                    return True
+        
+        print("Meow")
         return False
-
-
-class Bishop(ChessPiece):
-    def __init__(self, colour, ypos, xpos):
-        super().__init__(colour, ypos, xpos)
-
-    def legalMove(self, movingxpos, movingypos, board):
-        if abs(movingxpos - self.xpos) == abs(movingypos - self.ypos):
-            return True
-        return False
-
 
 class King(ChessPiece):
-    def __init__(self, colour, ypos, xpos):
-        super().__init__(colour, ypos, xpos)
+    def __init__(self, colour, ypos, xpos, has_moved=False):
+        super().__init__(colour, ypos, xpos, has_moved)
 
     def legalMove(self, movingxpos, movingypos, board):
         if movingxpos-1 == self.xpos or movingxpos+1 == self.xpos or movingxpos == self.xpos:
@@ -128,7 +129,7 @@ class ChessBoard:
         self.board[5][6] = Pawn(colour1, 5, 6)
         self.board[6][6] = Pawn(colour2, 6, 6)
         self.board[7][6] = Pawn(colour2, 7, 6)
-        self.board[7][7] = King(colour1, 7, 7)
+        self.board[5][3] = Castle(colour1, 5, 3)
 
 
     def print_board(self):
