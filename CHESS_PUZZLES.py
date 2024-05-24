@@ -75,8 +75,20 @@ class King(ChessPiece):
         super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
-        if abs(self.xpos - movingxpos) <= 1 and abs(self.ypos - movingypos) <= 1:
-            return True
+        if movingxpos-1 == self.xpos or movingxpos+1 == self.xpos or movingxpos == self.xpos:
+            if movingypos-1 == self.ypos or movingypos+1 == self.ypos or movingypos  == self.ypos:
+                if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
+                    print("capturing")
+                    return True
+            
+                elif board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
+                    print("ally")
+                    return False
+                else:
+                    print("Moving 1")
+                    return True
+
+        print("Meow")
         return False
 
 class Queen(ChessPiece):
@@ -112,42 +124,12 @@ class ChessBoard:
         #Rook
         colour1 = "white"
         colour2 = "black"
-        self.board[7][0] = Castle(colour2, 7, 0)
-        #Bishop
-        self.board[4][2] = Bishop(colour2, 4, 2)
-        self.board[3][4] = Bishop(colour2, 3, 4)
-        #Pawn
-        self.board[6][2] = Pawn(colour2, 6, 2)
-        self.board[6][0] = Pawn(colour2, 6, 0, True)
-        self.board[6][5] = Pawn(colour2, 6, 5)
-        self.board[6][7] = Pawn(colour2, 6, 7, True)
-        self.board[5][1] = Pawn(colour2, 5, 1)
-        self.board[5][4] = Pawn(colour2, 5, 4)
-        self.board[4][3] = Pawn(colour2, 4, 3)
-        #Horsy
-        self.board[7][1] = Knight(colour2, 7, 1)
-        self.board[4][7] = Knight(colour2, 4, 7)
-        #Royal Pieces
-        self.board[7][3] = Queen(colour2, 7, 3)
-        self.board[7][4] = King(colour2, 7, 4)
-
-        #white
-        #Horsy
-        self.board[4][4] = Knight(colour1, 4, 5)
-        self.board[2][2] = Knight(colour1, 2, 2)
-        #Pawn
-        for i in range(7):
-          self.board[1][i] = Pawn(colour1, 1, i)
-
-        #Royal Pieces
+        # example of figure placement: self.board[7][0] = Castle(colour2, 7, 0, True)
+        self.board[5][6] = Pawn(colour1, 5, 6)
+        self.board[6][6] = Pawn(colour2, 6, 6)
+        self.board[7][6] = Pawn(colour2, 7, 6)
         self.board[7][7] = King(colour1, 7, 7)
-        self.board[3][6] = King(colour1, 3, 6)
-        #Rook
-        self.board[0][0] = Castle(colour1, 0, 0)
-        self.board[0][7] = Castle(colour1, 0, 7)
-        #Bishop
-        self.board[0][2] = Bishop(colour1, 0, 2)
-        self.board[0][5] = Bishop(colour1, 0, 5)
+
 
     def print_board(self):
         piece_emojis = {
