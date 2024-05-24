@@ -114,7 +114,23 @@ class Knight(ChessPiece):
         elif (self.ypos - movingypos == 3 or movingypos-self.ypos == 3) and (self.xpos - movingxpos == 2 or movingxpos-self.xpos == 2):
             return True
         return False
+        
+class Horse(ChessPiece):
+    def __init__(self, colour, ypos, xpos, has_moved=False):
+        super().__init__(colour, ypos, xpos, has_moved)
 
+    def legalMove(self, movingxpos, movingypos, board):
+        deltax = abs(self.xpos - movingxpos)
+        deltay = abs(self.ypos - movingypos)
+        if (deltax == 1 and deltay == 2) or (deltax == 2 and deltay == 1):
+            if board[deltay][deltax] is not None and board[deltay][deltax].colour != self.colour:
+                return True
+            if board[deltay][deltax] is not None and board[deltay][deltax].colour == self.colour:
+                return False
+            else:
+                return True
+        return False
+    
 class ChessBoard:
     def __init__(self):
         self.board = [[None for _ in range(8)] for _ in range(8)]
@@ -129,7 +145,7 @@ class ChessBoard:
         self.board[5][6] = Pawn(colour1, 5, 6)
         self.board[6][6] = Pawn(colour2, 6, 6)
         self.board[7][6] = Pawn(colour2, 7, 6)
-        self.board[5][3] = Castle(colour1, 5, 3)
+        self.board[5][3] = Horse(colour1, 5, 3)
 
 
     def print_board(self):
@@ -138,10 +154,10 @@ class ChessBoard:
             "Pawn_white": "♙",
             "Castle_black": "♜",
             "Castle_white": "♖",
-            "Knight_black": "♞",
-            "Knight_white": "♘",
-            "Bishop_black": "♝",
-            "Bishop_white": "♗",
+            "Horse_black": "♞",
+            "Horse_white": "♘",
+            "Knight_black": "♝",
+            "Knight_white": "♗",
             "Queen_black": "♛",
             "Queen_white": "♕",
             "King_black": "♚",
