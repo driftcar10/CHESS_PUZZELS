@@ -146,12 +146,29 @@ class ChessBoard:
         colour1 = "white"
         colour2 = "black"
         # example of figure placement: self.board[7][0] = Castle(colour2, 7, 0, True)
-        self.board[5][6] = Pawn(colour1, 5, 6)
-        self.board[6][6] = Pawn(colour2, 6, 6)
-        self.board[6][5] = Pawn(colour2, 6, 5)
-        self.board[5][3] = Queen(colour1, 5, 3)
+        self.board[6][0] = Pawn(colour1, 6, 0)
+        self.board[6][1] = Pawn(colour1, 6, 1)
+        self.board[6][2] = Pawn(colour1, 6, 2)
+        self.board[6][5] = Pawn(colour1, 5, 5)
+        self.board[5][7] = Pawn(colour1, 5, 7)
+        self.board[4][6] = Pawn(colour1, 4, 6)
+        self.board[3][4] = Pawn(colour1, 3, 4)
+        
+        self.board[7][2] = King(colour1, 7, 2)
+        
+        self.board[7][3] = Castle(colour1, 7, 3)
+        self.board[7][7] = Castle(colour1, 7, 7)
+        
+        self.board[5][5] = Horse(colour1, 5, 5)
+        self.board[4][4] = Horse(colour1, 4, 4)
+        
+        self.board[4][2] = Knight(colour1, 4, 2)
+        self.board[3][6] = Knight(colour1, 3, 6)
 
-
+        
+        
+        self.board[3][4] = Pawn(colour2, 3, 4)
+        self.board[3][4] = Pawn(colour2, 3, 4)
     def print_board(self):
         piece_emojis = {
             "Pawn_black": "♟️",
@@ -179,13 +196,16 @@ class ChessBoard:
                     print('_', end=' ')
             print()
 
-    def move_piece(self, startx, starty, endx, endy):
+    def move_piece(self, startx, starty, endx, endy, player_colour):
         piece = self.board[starty][startx]
         if not piece:
             print("No piece at the given position.")
             return False
+            
+        if piece.colour != player_colour:
+            print("You cannot do that")
 
-        if piece.legalMove(endx, endy, self.board):  # Passing the board instance
+        elif piece.legalMove(endx, endy, self.board):  # Passing the board instance
             self.board[endy][endx] = piece
             self.board[starty][startx] = None
             piece.move_to(endy, endx)
@@ -202,7 +222,8 @@ class ChessBoard:
 def play_chess():
     board = ChessBoard()
     player = 1
-  
+    player_colour = "white"
+    print("Solve this chess puzzle to recieve the next clue. Whites turn.")
     while True:
         board.print_board()
         start = input("Enter starting position (e.g., A2): ").upper()
@@ -215,10 +236,13 @@ def play_chess():
             continue
 
         if 0 <= startx <= 7 and 0 <= starty <= 7 and 0 <= endx <= 7 and 0 <= endy <= 7:
-            if board.move_piece(startx, starty, endx, endy):
-                player = 3 - player  # Switch players
+            if board.move_piece(startx, starty, endx, endy, player_colour):
+                if self.board[2][5].__name__ == "Horse" and self.board[2][5].colour == "white":
+                    print("You win!")
+                    return
             else:
                 print("Try again.")
+                play_chess()
         else:
             print("Invalid coordinates. Coordinates must be within the board.")
 
