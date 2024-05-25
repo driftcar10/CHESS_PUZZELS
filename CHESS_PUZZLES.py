@@ -109,10 +109,15 @@ class Knight(ChessPiece):
         super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
-        if (self.xpos - movingxpos == 3 or movingxpos-self.xpos == 3) and (self.ypos - movingypos == 2 or movingypos-self.ypos == 2):
-            return True
-        elif (self.ypos - movingypos == 3 or movingypos-self.ypos == 3) and (self.xpos - movingxpos == 2 or movingxpos-self.xpos == 2):
-            return True
+        deltax = abs(self.xpos - movingxpos)
+        deltay = abs(self.ypos - movingypos)
+        if deltax == deltay:
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
+                return True
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
+                return False
+            else:
+                return True
         return False
         
 class Horse(ChessPiece):
@@ -123,9 +128,9 @@ class Horse(ChessPiece):
         deltax = abs(self.xpos - movingxpos)
         deltay = abs(self.ypos - movingypos)
         if (deltax == 1 and deltay == 2) or (deltax == 2 and deltay == 1):
-            if board[deltay][deltax] is not None and board[deltay][deltax].colour != self.colour:
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
                 return True
-            if board[deltay][deltax] is not None and board[deltay][deltax].colour == self.colour:
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
                 return False
             else:
                 return True
@@ -144,8 +149,8 @@ class ChessBoard:
         # example of figure placement: self.board[7][0] = Castle(colour2, 7, 0, True)
         self.board[5][6] = Pawn(colour1, 5, 6)
         self.board[6][6] = Pawn(colour2, 6, 6)
-        self.board[7][6] = Pawn(colour2, 7, 6)
-        self.board[5][3] = Horse(colour1, 5, 3)
+        self.board[6][5] = Pawn(colour2, 6, 5)
+        self.board[5][3] = Knight(colour1, 5, 3)
 
 
     def print_board(self):
