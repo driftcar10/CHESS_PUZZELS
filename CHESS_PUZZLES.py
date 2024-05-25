@@ -97,10 +97,30 @@ class Queen(ChessPiece):
         super().__init__(colour, ypos, xpos)
 
     def legalMove(self, movingxpos, movingypos, board):
-        if abs(movingxpos - self.xpos) == abs(movingypos - self.ypos):
-            return True
-        if (self.xpos == movingxpos or self.ypos == movingypos):
-            return True
+        
+        if movingxpos == self.xpos or movingypos == self.ypos:
+                if 0 <= movingypos <= 7 or 0 <= movingxpos <= 7:
+                    if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
+                        print("capturing")
+                        return True
+                
+                    elif board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
+                        print("ally")
+                        return False
+                    else:
+                        print("Moving")
+                        return True
+    
+        deltax = abs(self.xpos - movingxpos)
+        deltay = abs(self.ypos - movingypos)
+        
+        if deltax == deltay:
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
+                return True
+            if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
+                return False
+            else:
+                return True
         return False
 
 
@@ -150,7 +170,7 @@ class ChessBoard:
         self.board[5][6] = Pawn(colour1, 5, 6)
         self.board[6][6] = Pawn(colour2, 6, 6)
         self.board[6][5] = Pawn(colour2, 6, 5)
-        self.board[5][3] = Knight(colour1, 5, 3)
+        self.board[5][3] = Queen(colour1, 5, 3)
 
 
     def print_board(self):
