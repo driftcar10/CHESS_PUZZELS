@@ -149,7 +149,7 @@ class ChessBoard:
         self.board[6][0] = Pawn(colour1, 6, 0)
         self.board[6][1] = Pawn(colour1, 6, 1)
         self.board[6][2] = Pawn(colour1, 6, 2)
-        self.board[6][5] = Pawn(colour1, 5, 5)
+        self.board[6][5] = Pawn(colour1, 6, 5)
         self.board[5][7] = Pawn(colour1, 5, 7)
         self.board[4][6] = Pawn(colour1, 4, 6)
         self.board[3][4] = Pawn(colour1, 3, 4)
@@ -167,8 +167,26 @@ class ChessBoard:
 
         
         
-        self.board[3][4] = Pawn(colour2, 3, 4)
-        self.board[3][4] = Pawn(colour2, 3, 4)
+        self.board[2][2] = Pawn(colour2, 2, 2)
+        self.board[2][4] = Pawn(colour2, 2, 4)
+        self.board[2][6] = Pawn(colour2, 2, 6)
+        self.board[1][0] = Pawn(colour2, 1, 0)
+        self.board[1][1] = Pawn(colour2, 1, 1)
+        self.board[1][5] = Pawn(colour2, 1, 5)
+        self.board[1][7] = Pawn(colour2, 1, 7)
+        
+        self.board[1][3] = Knight(colour2, 1, 3)
+        self.board[0][7] = Knight(colour2, 0, 7)
+        
+        self.board[1][6] = Horse(colour2, 1, 6)
+        
+        self.board[0][0] = Castle(colour2, 0, 0)
+        self.board[0][4] = Castle(colour2, 0, 4)
+       
+        self.board[0][6] = King(colour2, 0, 6)
+        
+        self.board[0][5] = Queen(colour2, 0, 5)
+        
     def print_board(self):
         piece_emojis = {
             "Pawn_black": "♟️",
