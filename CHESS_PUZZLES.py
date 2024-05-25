@@ -80,6 +80,7 @@ class Queen(ChessPiece):
 
     def legalMove(self, movingxpos, movingypos, board):
         
+        
         if movingxpos == self.xpos or movingypos == self.ypos:
                 if 0 <= movingypos <= 7 or 0 <= movingxpos <= 7:
                     if board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour != self.colour:
@@ -87,6 +88,7 @@ class Queen(ChessPiece):
                 
                     elif board[movingypos][movingxpos] is not None and board[movingypos][movingxpos].colour == self.colour:
                         return False
+                        
                     else:
                         return True
     
@@ -222,8 +224,9 @@ class ChessBoard:
             
         if piece.colour != player_colour:
             print("You cannot do that")
+            return False
 
-        elif piece.legalMove(endx, endy, self.board):  # Passing the board instance
+        if piece.legalMove(endx, endy, self.board):  # Passing the board instance
             self.board[endy][endx] = piece
             self.board[starty][startx] = None
             piece.move_to(endy, endx)
@@ -233,7 +236,17 @@ class ChessBoard:
         else:
             print("Illegal move.")
             return False
-
+            
+    def check_puzzle(self):
+        if self.board[2][5] is not None:
+            print("1")
+            if self.board[2][5].__class__.__name__ == "Horse":
+                print("2")
+                if self.board[2][3].colour == "white":
+                    print("3")
+                    return True
+        print("error")
+        return False
 
 
 # Game Loop
@@ -255,12 +268,13 @@ def play_chess():
 
         if 0 <= startx <= 7 and 0 <= starty <= 7 and 0 <= endx <= 7 and 0 <= endy <= 7:
             if board.move_piece(startx, starty, endx, endy, player_colour):
-                if self.board[2][5].__name__ == "Horse" and self.board[2][5].colour == "white":
-                    print("You win!")
+                board.print_board()
+                if board.check_puzzle:
+                    print("You win")
                     return
-            else:
-                print("Try again.")
-                play_chess()
+                else:
+                    print("Try again.")
+                    play_chess()
         else:
             print("Invalid coordinates. Coordinates must be within the board.")
 
