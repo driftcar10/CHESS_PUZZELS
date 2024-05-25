@@ -191,29 +191,29 @@ class ChessBoard:
         
     def print_board(self):
         piece_emojis = {
-            "Pawn_black": "♟️",
-            "Pawn_white": "♙",
-            "Castle_black": "♜",
-            "Castle_white": "♖",
-            "Horse_black": "♞",
-            "Horse_white": "♘",
-            "Knight_black": "♝",
-            "Knight_white": "♗",
-            "Queen_black": "♛",
-            "Queen_white": "♕",
-            "King_black": "♚",
-            "King_white": "♔"
+            "Pawn_black": "\u265F",
+            "Pawn_white": "\u2659",
+            "Castle_black": "\u265C",
+            "Castle_white": "\u2656",
+            "Horse_black": "\u265E",
+            "Horse_white": "\u2658",
+            "Knight_black": "\u265D",
+            "Knight_white": "\u2657",
+            "Queen_black": "\u265B",
+            "Queen_white": "\u2655",
+            "King_black": "\u265A",
+            "King_white": "\u2654"
         }
         column_labels = "ABCDEFGH"
         print("  ", " ".join(column_labels))
         for i, row in enumerate(self.board):
             print(i+1, end="  ")
             for piece in row:
-                if piece:
-                    piece_name = piece.__class__.__name__ + "_" + piece.colour
-                    print(piece_emojis[piece_name], end=' ')
-                else:
-                    print('_', end=' ')
+               if piece:
+                   piece_name = piece.__class__.__name__ + "_" + piece.colour
+                   print("{}".format(piece_emojis[piece_name]), end=' ')
+               else:
+                   print('_', end=' ')
             print()
 
     def move_piece(self, startx, starty, endx, endy, player_colour):
@@ -238,15 +238,13 @@ class ChessBoard:
             return False
             
     def check_puzzle(self):
-        if self.board[2][5] is not None:
-            if self.board[2][5].__class__.__name__ == "Horse":
-                if self.board[2][3].colour == "white":
-                    return True
+        if self.board[2][5] is not None and self.board[2][5].__class__.__name__ == "Horse" and self.board[2][5].colour == "white":
+            return True
         return False
         
 def print_clue():
     print(" __________________________________________________________________________ ")
-    print("|   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 |")
+    print("|  1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 |")
     print("|                                                                          |")
     print("|1  H                                                                   He |")
     print("|                                                                          |")
@@ -269,6 +267,7 @@ def print_clue():
     print("|  Aktinoidi**  Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr |")
     print("|__________________________________________________________________________|")
     return
+    
 
 # Game Loop
 def play_chess():
@@ -284,15 +283,17 @@ def play_chess():
             startx, starty = ord(start[0]) - ord('A'), int(start[1])-1
             endx, endy = ord(end[0]) - ord('A'), int(end[1])-1
         except ValueError:
-            print("These are not the dro.. no, the inputs you are looking for!")
+            print("These are not the dro.. the inputs you are looking for!")
             continue
 
         if 0 <= startx <= 7 and 0 <= starty <= 7 and 0 <= endx <= 7 and 0 <= endy <= 7:
             if board.move_piece(startx, starty, endx, endy, player_colour):
                 board.print_board()
-                if board.check_puzzle:
+
+                if board.check_puzzle():
                     print("You win")
                     print_clue()
+                    s = input("Press any key to close ")
                     return
                 else:
                     print("Try again.")
