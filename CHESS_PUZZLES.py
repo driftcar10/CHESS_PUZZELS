@@ -239,15 +239,36 @@ class ChessBoard:
             
     def check_puzzle(self):
         if self.board[2][5] is not None:
-            print("1")
             if self.board[2][5].__class__.__name__ == "Horse":
-                print("2")
                 if self.board[2][3].colour == "white":
-                    print("3")
                     return True
-        print("error")
         return False
-
+        
+def print_clue():
+    print(" __________________________________________________________________________ ")
+    print("|   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 |")
+    print("|                                                                          |")
+    print("|1  H                                                                   He |")
+    print("|                                                                          |")
+    print("|2  Li  Be                                          B   .   N   .   F   Ne |")
+    print("|                                                                          |")
+    print("|3  Na  Mg                                          Al  Si  P   S   ..  Ar |")
+    print("|                                                                          |")
+    print("|4  .   Ca  Sc  Ti  V   Cr  Mn  Fe  Co  Ni  Cu  Zn  Ga  Ge  As  Se  Br  Kr |")
+    print("|                                                                          |")
+    print("|5  Rb  Sr  Y   Zr  Nb  Mo  Tc  Ru  Rh  Pd  Ag  Cd  In  Sn  Sb  Te  I   Xe |")
+    print("|                                                                          |")
+    print("|6  Cs  Ba  *   Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn |")
+    print("|                                                                          |")
+    print("|7  Fr  Ra  **  Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og |")
+    print("|__________________________________________________________________________|")
+    print("|                                                                          |")
+    print("|                                                                          |")
+    print("| Lantanoidi*   La  Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb  Lu |")
+    print("|                                                                          |")
+    print("|  Aktinoidi**  Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr |")
+    print("|__________________________________________________________________________|")
+    return
 
 # Game Loop
 def play_chess():
@@ -271,6 +292,7 @@ def play_chess():
                 board.print_board()
                 if board.check_puzzle:
                     print("You win")
+                    print_clue()
                     return
                 else:
                     print("Try again.")
