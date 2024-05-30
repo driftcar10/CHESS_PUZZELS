@@ -154,18 +154,18 @@ class ChessBoard:
 
     def print_board(self):
         piece_emojis = {
-            "Pawn_black": "♟️",
-            "Pawn_white": "♙",
-            "Castle_black": "♜",
-            "Castle_white": "♖",
-            "Horse_black": "♞",
-            "Horse_white": "♘",
-            "Knight_black": "♝",
-            "Knight_white": "♗",
-            "Queen_black": "♛",
-            "Queen_white": "♕",
-            "King_black": "♚",
-            "King_white": "♔"
+            "Pawn_black": "\u265F",
+            "Pawn_white": "\u2659",
+            "Castle_black": "\u265C",
+            "Castle_white": "\u2656",
+            "Horse_black": "\u265E",
+            "Horse_white": "\u2658",
+            "Knight_black": "\u265D",
+            "Knight_white": "\u2657",
+            "Queen_black": "\u265B",
+            "Queen_white": "\u2655",
+            "King_black": "\u265A",
+            "King_white": "\u2654"
         }
         column_labels = "ABCDEFGH"
         print("  ", " ".join(column_labels))
@@ -174,7 +174,7 @@ class ChessBoard:
             for piece in row:
                 if piece:
                     piece_name = piece.__class__.__name__ + "_" + piece.colour
-                    print(piece_emojis[piece_name], end=' ')
+                    print("{}".format(piece_emojis[piece_name]), end=' ')
                 else:
                     print('_', end=' ')
             print()
