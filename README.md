@@ -1,2 +1,2 @@
 # CHESS_PUZZELS
-CHESS PUZZLES is a python game focused on solving chess puzzles.
+This branch of CHESS PUZZLES is for Walton Club which is finished as of 1/6/2024, do not commit here!
